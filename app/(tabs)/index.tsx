@@ -1,70 +1,106 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import React, { useEffect, useState } from "react"
+import {
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  FlatList,
+  Button,
+  Dimensions,
+  ActivityIndicator,
+} from "react-native"
+import { StatusBar } from "expo-status-bar"
+import { GET_RANDOM_QUESTION } from "@/api/events"
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+interface Question {
+  category: string
+  QuestionText: string
+  QuestionTextEn: string
+  Active: boolean
+  Rank: number
+}
 
-export default function HomeScreen() {
+const QuestionCard: React.FC<Question> = ({ QuestionTextEn }) => {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({ ios: 'cmd + d', android: 'cmd + m' })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
-  );
+    <View style={styles.cardContainer}>
+      {/* <Text style={styles.categoryText}>{category}</Text> */}
+      <Text style={styles.questionText}>{QuestionTextEn}</Text>
+    </View>
+  )
+}
+
+const HomeScreen: React.FC = () => {
+  const [cardData, setCardData] = useState<Question>()
+  const [loading, setLoading] = useState<boolean>(false)
+
+  const getData = () => {
+    setLoading(true)
+    GET_RANDOM_QUESTION()
+      .then((data: any) => setCardData(data))
+      .finally(() => setLoading(false))
+  }
+
+  useEffect(() => {
+    getData()
+  }, [])
+
+  const renderFooter = () => {
+    if (!loading) return null
+    return <ActivityIndicator size="large" color="#0000ff" />
+  }
+
+  return (
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: "white",
+      }}
+    >
+      <StatusBar style="dark" />
+
+      <FlatList
+        data={[cardData]}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }: any) => <QuestionCard {...item} />}
+        contentContainerStyle={{
+          flex: 1,
+          justifyContent: "center",
+        }}
+        ListFooterComponent={renderFooter}
+      />
+
+      <Button title="Shuffle" onPress={getData} />
+    </SafeAreaView>
+  )
 }
 
 const styles = StyleSheet.create({
   titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+    fontSize: 28,
+    textAlign: "center",
+    marginVertical: 20,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  cardContainer: {
+    backgroundColor: "#f8f9fa",
+    padding: 20,
+    marginVertical: 10,
+    marginHorizontal: 20,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 8,
+    elevation: 3,
+    minHeight: Dimensions.get("window").height * 0.65,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  categoryText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 5,
   },
-});
+  questionText: {
+    fontSize: 16,
+  },
+})
+
+export default HomeScreen
