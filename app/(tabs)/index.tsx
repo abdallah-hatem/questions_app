@@ -8,9 +8,12 @@ import {
   Button,
   Dimensions,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native"
 import { StatusBar } from "expo-status-bar"
 import { GET_RANDOM_QUESTION } from "@/api/events"
+import { useSelector } from "react-redux"
+import { RootState } from "@/store"
 
 interface Question {
   category: string
@@ -20,11 +23,15 @@ interface Question {
   Rank: number
 }
 
-const QuestionCard: React.FC<Question> = ({ QuestionTextEn }) => {
+const QuestionCard: React.FC<Question> = ({ QuestionTextEn, QuestionText }) => {
+  const { lang } = useSelector((state: RootState) => state.lang)
+
   return (
     <View style={styles.cardContainer}>
       {/* <Text style={styles.categoryText}>{category}</Text> */}
-      <Text style={styles.questionText}>{QuestionTextEn}</Text>
+      <Text style={styles.questionText}>
+        {lang === "en" ? QuestionTextEn : QuestionText}
+      </Text>
     </View>
   )
 }
@@ -32,6 +39,8 @@ const QuestionCard: React.FC<Question> = ({ QuestionTextEn }) => {
 const HomeScreen: React.FC = () => {
   const [cardData, setCardData] = useState<Question>()
   const [loading, setLoading] = useState<boolean>(false)
+
+  console.log(cardData)
 
   const getData = () => {
     setLoading(true)
@@ -69,7 +78,26 @@ const HomeScreen: React.FC = () => {
         ListFooterComponent={renderFooter}
       />
 
-      <Button title="Shuffle" onPress={getData} />
+      <TouchableOpacity
+        onPress={getData}
+        style={{
+          margin: 20,
+          padding: 10,
+          borderRadius: 10,
+          backgroundColor: "blue",
+        }}
+      >
+        <Text
+          style={{
+            textAlign: "center",
+            color: "white",
+            fontWeight: "bold",
+            fontSize: 16,
+          }}
+        >
+          Shuffle
+        </Text>
+      </TouchableOpacity>
     </SafeAreaView>
   )
 }
