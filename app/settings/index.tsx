@@ -9,7 +9,7 @@ import {
 } from "react-native"
 import { useDispatch, useSelector } from "react-redux"
 
-export default function TabTwoScreen() {
+export default function Settings() {
   const { lang } = useSelector((state: RootState) => state.lang)
 
   const dispatch = useDispatch()

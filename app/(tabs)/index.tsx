@@ -5,7 +5,6 @@ import {
   View,
   SafeAreaView,
   FlatList,
-  Button,
   Dimensions,
   ActivityIndicator,
   TouchableOpacity,
@@ -14,6 +13,8 @@ import { StatusBar } from "expo-status-bar"
 import { GET_RANDOM_QUESTION } from "@/api/events"
 import { useSelector } from "react-redux"
 import { RootState } from "@/store"
+import { Button } from "react-native-paper"
+import { EvilIcons } from "@expo/vector-icons"
 
 interface Question {
   category: string
@@ -53,11 +54,6 @@ const HomeScreen: React.FC = () => {
     getData()
   }, [])
 
-  const renderFooter = () => {
-    if (!loading) return null
-    return <ActivityIndicator size="large" color="#0000ff" />
-  }
-
   return (
     <SafeAreaView
       style={{
@@ -75,28 +71,23 @@ const HomeScreen: React.FC = () => {
           flex: 1,
           justifyContent: "center",
         }}
-        ListFooterComponent={renderFooter}
       />
 
-      <TouchableOpacity
-        onPress={getData}
-        style={{
-          margin: 20,
-          padding: 10,
-          borderRadius: 10,
-          backgroundColor: "blue",
-        }}
-      >
-        <Text
-          style={{
-            textAlign: "center",
-            color: "white",
-            fontWeight: "bold",
-            fontSize: 16,
-          }}
-        >
-          Shuffle
-        </Text>
+      <TouchableOpacity onPress={getData} style={styles.suffleBtn}>
+        {!loading ? (
+          <Text style={styles.suffleBtnText}>Shuffle</Text>
+        ) : (
+          <>
+            <ActivityIndicator
+              style={{
+                height: "100%",
+                width: "100%",
+              }}
+              size="large"
+              color="white"
+            />
+          </>
+        )}
       </TouchableOpacity>
     </SafeAreaView>
   )
@@ -128,6 +119,28 @@ const styles = StyleSheet.create({
   },
   questionText: {
     fontSize: 16,
+  },
+  suffleBtn: {
+    margin: 20,
+    // padding: 10,
+    borderRadius: 50,
+    backgroundColor: "orange",
+    width: 100,
+    height: 100,
+    alignSelf: "center",
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 8,
+    display: "flex",
+    justifyContent: "center",
+  },
+  suffleBtnText: {
+    textAlign: "center",
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 20,
   },
 })
 

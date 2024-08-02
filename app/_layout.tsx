@@ -13,6 +13,10 @@ import { useColorScheme } from "@/hooks/useColorScheme"
 import { Provider } from "react-redux"
 import { persistor, store } from "@/store"
 import { PersistGate } from "redux-persist/integration/react"
+import {
+  MD3LightTheme as PaperDefaultTheme,
+  PaperProvider,
+} from "react-native-paper"
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()
@@ -33,18 +37,38 @@ export default function RootLayout() {
     return null
   }
 
+  const theme = {
+    ...PaperDefaultTheme,
+    colors: {
+      ...PaperDefaultTheme.colors,
+      primary: "orange",
+      secondary: "white",
+    },
+  }
+
   return (
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <ThemeProvider
-          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-        >
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="+not-found" />
-          </Stack>
-        </ThemeProvider>
-      </PersistGate>
+      <PaperProvider theme={theme}>
+        <PersistGate loading={null} persistor={persistor}>
+          <ThemeProvider
+            value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+          >
+            <Stack>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen name="+not-found" />
+              <Stack.Screen
+                name="settings"
+                options={{
+                  headerShown: true,
+                  headerBackTitle: "Home",
+                  headerStyle: { backgroundColor: "white" },
+                  headerTitle: "",
+                }}
+              />
+            </Stack>
+          </ThemeProvider>
+        </PersistGate>
+      </PaperProvider>
     </Provider>
   )
 }
