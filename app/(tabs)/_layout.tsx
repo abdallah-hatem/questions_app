@@ -5,6 +5,7 @@ import { TabBarIcon } from "@/components/navigation/TabBarIcon"
 import { Colors } from "@/constants/Colors"
 import { useColorScheme } from "@/hooks/useColorScheme"
 import { Appbar } from "react-native-paper"
+import "@/i18"
 
 export default function TabLayout() {
   const colorScheme = useColorScheme()

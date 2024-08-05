@@ -13,8 +13,14 @@ import { StatusBar } from "expo-status-bar"
 import { GET_RANDOM_QUESTION } from "@/api/events"
 import { useSelector } from "react-redux"
 import { RootState } from "@/store"
-import { Button } from "react-native-paper"
-import { EvilIcons } from "@expo/vector-icons"
+import { useTranslation } from "react-i18next"
+
+type Category = {
+  CategoryNameEn: string
+  CategoryName: string
+  Active: boolean
+  Color: string
+}
 
 interface Question {
   category: string
@@ -22,17 +28,38 @@ interface Question {
   QuestionTextEn: string
   Active: boolean
   Rank: number
+  Category: Category
 }
 
-const QuestionCard: React.FC<Question> = ({ QuestionTextEn, QuestionText }) => {
+const QuestionCard: React.FC<Question> = ({
+  QuestionTextEn,
+  QuestionText,
+  Category,
+}) => {
   const { lang } = useSelector((state: RootState) => state.lang)
+
+  const { CategoryName, CategoryNameEn } = Category ?? {}
 
   return (
     <View style={styles.cardContainer}>
       {/* <Text style={styles.categoryText}>{category}</Text> */}
-      <Text style={styles.questionText}>
-        {lang === "en" ? QuestionTextEn : QuestionText}
-      </Text>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <View style={styles.catTextCont}>
+          <Text style={styles.catText}>
+            {lang === "en" ? CategoryNameEn : CategoryName}
+          </Text>
+        </View>
+
+        <Text style={styles.questionText}>
+          {lang === "en" ? QuestionTextEn : QuestionText}
+        </Text>
+      </View>
     </View>
   )
 }
@@ -40,8 +67,11 @@ const QuestionCard: React.FC<Question> = ({ QuestionTextEn, QuestionText }) => {
 const HomeScreen: React.FC = () => {
   const [cardData, setCardData] = useState<Question>()
   const [loading, setLoading] = useState<boolean>(false)
+  const { t, i18n } = useTranslation()
 
   console.log(cardData)
+
+  console.log(i18n.language, "i18n.language")
 
   const getData = () => {
     setLoading(true)
@@ -75,7 +105,7 @@ const HomeScreen: React.FC = () => {
 
       <TouchableOpacity onPress={getData} style={styles.suffleBtn}>
         {!loading ? (
-          <Text style={styles.suffleBtnText}>Shuffle</Text>
+          <Text style={styles.suffleBtnText}>{t("shuffle")}</Text>
         ) : (
           <>
             <ActivityIndicator
@@ -100,7 +130,8 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   cardContainer: {
-    backgroundColor: "#f8f9fa",
+    // backgroundColor: "orange",
+    backgroundColor: "#ebeff5",
     padding: 20,
     marginVertical: 10,
     marginHorizontal: 20,
@@ -110,7 +141,10 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 8,
     elevation: 3,
-    minHeight: Dimensions.get("window").height * 0.65,
+    height: Dimensions.get("window").height * 0.65,
+    maxHeight: 600,
+    borderWidth: 1,
+    borderColor: "lightgray",
   },
   categoryText: {
     fontSize: 18,
@@ -120,6 +154,21 @@ const styles = StyleSheet.create({
   questionText: {
     fontSize: 16,
   },
+  catTextCont: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    backgroundColor: "white",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 10,
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 8,
+  },
+  catText: { fontSize: 16, fontWeight: "bold", textTransform: "uppercase" },
   suffleBtn: {
     margin: 20,
     // padding: 10,

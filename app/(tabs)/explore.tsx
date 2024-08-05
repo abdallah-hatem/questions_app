@@ -1,5 +1,6 @@
 import { RootState } from "@/store"
 import { setLang } from "@/store/lang.store"
+import { useTranslation } from "react-i18next"
 import {
   StyleSheet,
   SafeAreaView,
@@ -8,19 +9,28 @@ import {
   TouchableOpacity,
 } from "react-native"
 import { useDispatch, useSelector } from "react-redux"
+import "@/i18"
+import { useEffect } from "react"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 export default function TabTwoScreen() {
   const { lang } = useSelector((state: RootState) => state.lang)
+  const { t, i18n } = useTranslation()
 
   const dispatch = useDispatch()
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-      <Text style={styles.titleContainer}>Setting</Text>
+      <Text style={styles.titleContainer}>{t("settings")}</Text>
       <View style={styles.cardContainer}>
-        <Text>Language</Text>
+        <Text>{t("language")}</Text>
         <View style={{ flexDirection: "row", gap: 10 }}>
-          <TouchableOpacity onPress={() => dispatch(setLang("ar"))}>
+          <TouchableOpacity
+            onPress={() => {
+              dispatch(setLang("ar"))
+              i18n.changeLanguage("ar")
+            }}
+          >
             <Text
               style={{ color: lang === "ar" ? "orange" : "gray", fontSize: 16 }}
             >
@@ -28,7 +38,12 @@ export default function TabTwoScreen() {
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => dispatch(setLang("en"))}>
+          <TouchableOpacity
+            onPress={() => {
+              dispatch(setLang("en"))
+              i18n.changeLanguage("en")
+            }}
+          >
             <Text
               style={{ color: lang === "en" ? "orange" : "gray", fontSize: 16 }}
             >

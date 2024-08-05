@@ -18,6 +18,9 @@ import {
   PaperProvider,
 } from "react-native-paper"
 
+import "@/i18"
+import { useTranslation } from "react-i18next"
+
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()
 
@@ -26,6 +29,7 @@ export default function RootLayout() {
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   })
+  const { t } = useTranslation()
 
   useEffect(() => {
     if (loaded) {
@@ -48,8 +52,8 @@ export default function RootLayout() {
 
   return (
     <Provider store={store}>
-      <PaperProvider theme={theme}>
-        <PersistGate loading={null} persistor={persistor}>
+      <PersistGate loading={null} persistor={persistor}>
+        <PaperProvider theme={theme}>
           <ThemeProvider
             value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
           >
@@ -60,15 +64,15 @@ export default function RootLayout() {
                 name="settings"
                 options={{
                   headerShown: true,
-                  headerBackTitle: "Home",
+                  headerBackTitle: t("home"),
                   headerStyle: { backgroundColor: "white" },
                   headerTitle: "",
                 }}
               />
             </Stack>
           </ThemeProvider>
-        </PersistGate>
-      </PaperProvider>
+        </PaperProvider>
+      </PersistGate>
     </Provider>
   )
 }
