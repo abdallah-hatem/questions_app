@@ -8,29 +8,68 @@ import {
   TouchableOpacity,
 } from "react-native"
 import { useDispatch, useSelector } from "react-redux"
+import { useTranslation } from "react-i18next"
+import { useEffect } from "react"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import { Colors } from "@/constants/Colors"
 
 export default function Settings() {
   const { lang } = useSelector((state: RootState) => state.lang)
+  const { t, i18n } = useTranslation()
+  const currentLanguage = i18n.language
+
+  console.log(currentLanguage, "currentLanguage")
+
+  useEffect(() => {
+    const loadLanguage = async () => {
+      const savedLanguage = await AsyncStorage.getItem("language")
+      if (savedLanguage) {
+        i18n.changeLanguage(savedLanguage)
+      }
+    }
+    loadLanguage()
+  }, [i18n])
+
+  const changeLanguage = async (lang: string) => {
+    await AsyncStorage.setItem("language", lang)
+    i18n.changeLanguage(lang)
+  }
 
   const dispatch = useDispatch()
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-      <Text style={styles.titleContainer}>Setting</Text>
+      <Text style={styles.titleContainer}>{t("settings")}</Text>
       <View style={styles.cardContainer}>
-        <Text>Language</Text>
+        <Text>{t("language")}</Text>
         <View style={{ flexDirection: "row", gap: 10 }}>
-          <TouchableOpacity onPress={() => dispatch(setLang("ar"))}>
+          <TouchableOpacity
+            onPress={() => {
+              changeLanguage("ar")
+              dispatch(setLang("ar"))
+            }}
+          >
             <Text
-              style={{ color: lang === "ar" ? "orange" : "gray", fontSize: 16 }}
+              style={{
+                color: lang === "ar" ? Colors.primary : "gray",
+                fontSize: 16,
+              }}
             >
               AR
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => dispatch(setLang("en"))}>
+          <TouchableOpacity
+            onPress={() => {
+              changeLanguage("en")
+              dispatch(setLang("en"))
+            }}
+          >
             <Text
-              style={{ color: lang === "en" ? "orange" : "gray", fontSize: 16 }}
+              style={{
+                color: lang === "en" ? Colors.primary : "gray",
+                fontSize: 16,
+              }}
             >
               EN
             </Text>

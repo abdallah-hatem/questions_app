@@ -2,20 +2,23 @@
   "expo": {
     "name": "Question?",
     "slug": "question-app",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#FF5733"
     },
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.game10.questions",
-      "buildNumber": "1"
+      "buildNumber": "3",
+      "infoPlist": {
+        "ExpoLocalization_supportsRTL": true
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -35,7 +38,13 @@
       "typedRoutes": true
     },
     "extra": {
-      "supportsRTL": true
+      "supportsRTL": true,
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "047e25ea-40c8-488b-95fc-cb863ae9bed6"
+      }
     }
   }
 }

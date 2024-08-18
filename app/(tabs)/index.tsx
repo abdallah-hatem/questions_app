@@ -14,31 +14,34 @@ import { GET_RANDOM_QUESTION } from "@/api/events"
 import { useSelector } from "react-redux"
 import { RootState } from "@/store"
 import { useTranslation } from "react-i18next"
+import { Colors } from "@/constants/Colors"
 
 type Category = {
-  CategoryNameEn: string
-  CategoryName: string
-  Active: boolean
-  Color: string
+  categoryNameEn: string
+  categoryName: string
+  active: boolean
+  color: string
 }
 
 interface Question {
-  category: string
-  QuestionText: string
-  QuestionTextEn: string
-  Active: boolean
+  // category: string
+  questionText: string
+  questionTextEn: string
+  active: boolean
   Rank: number
-  Category: Category
+  category: Category
 }
 
 const QuestionCard: React.FC<Question> = ({
-  QuestionTextEn,
-  QuestionText,
-  Category,
+  questionTextEn,
+  questionText,
+  category,
 }) => {
   const { lang } = useSelector((state: RootState) => state.lang)
 
-  const { CategoryName, CategoryNameEn } = Category ?? {}
+  const { categoryName, categoryNameEn } = category ?? {}
+
+  console.log(categoryName, "categoryName")
 
   return (
     <View style={styles.cardContainer}>
@@ -52,12 +55,12 @@ const QuestionCard: React.FC<Question> = ({
       >
         <View style={styles.catTextCont}>
           <Text style={styles.catText}>
-            {lang === "en" ? CategoryNameEn : CategoryName}
+            {lang === "en" ? categoryNameEn : categoryName}
           </Text>
         </View>
 
         <Text style={styles.questionText}>
-          {lang === "en" ? QuestionTextEn : QuestionText}
+          {lang === "en" ? questionTextEn : questionText}
         </Text>
       </View>
     </View>
@@ -173,7 +176,7 @@ const styles = StyleSheet.create({
     margin: 20,
     // padding: 10,
     borderRadius: 50,
-    backgroundColor: "orange",
+    backgroundColor: Colors.primary,
     width: 100,
     height: 100,
     alignSelf: "center",
