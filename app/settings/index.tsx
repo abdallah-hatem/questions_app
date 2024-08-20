@@ -1,41 +1,41 @@
-import { RootState } from "@/store"
-import { setLang } from "@/store/lang.store"
+import { RootState } from "@/store";
+import { setLang } from "@/store/lang.store";
 import {
   StyleSheet,
   SafeAreaView,
   Text,
   View,
   TouchableOpacity,
-} from "react-native"
-import { useDispatch, useSelector } from "react-redux"
-import { useTranslation } from "react-i18next"
-import { useEffect } from "react"
-import AsyncStorage from "@react-native-async-storage/async-storage"
-import { Colors } from "@/constants/Colors"
+} from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Colors } from "@/constants/Colors";
 
 export default function Settings() {
-  const { lang } = useSelector((state: RootState) => state.lang)
-  const { t, i18n } = useTranslation()
-  const currentLanguage = i18n.language
+  const { lang } = useSelector((state: RootState) => state.lang);
+  const { t, i18n } = useTranslation();
+  const currentLanguage = i18n.language;
 
-  console.log(currentLanguage, "currentLanguage")
+  console.log(currentLanguage, "currentLanguage");
 
   useEffect(() => {
     const loadLanguage = async () => {
-      const savedLanguage = await AsyncStorage.getItem("language")
+      const savedLanguage = await AsyncStorage.getItem("language");
       if (savedLanguage) {
-        i18n.changeLanguage(savedLanguage)
+        i18n.changeLanguage(savedLanguage);
       }
-    }
-    loadLanguage()
-  }, [i18n])
+    };
+    loadLanguage();
+  }, [i18n]);
 
   const changeLanguage = async (lang: string) => {
-    await AsyncStorage.setItem("language", lang)
-    i18n.changeLanguage(lang)
-  }
+    await AsyncStorage.setItem("language", lang);
+    i18n.changeLanguage(lang);
+  };
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
@@ -45,8 +45,8 @@ export default function Settings() {
         <View style={{ flexDirection: "row", gap: 10 }}>
           <TouchableOpacity
             onPress={() => {
-              changeLanguage("ar")
-              dispatch(setLang("ar"))
+              changeLanguage("ar");
+              dispatch(setLang("ar"));
             }}
           >
             <Text
@@ -61,8 +61,8 @@ export default function Settings() {
 
           <TouchableOpacity
             onPress={() => {
-              changeLanguage("en")
-              dispatch(setLang("en"))
+              changeLanguage("en");
+              dispatch(setLang("en"));
             }}
           >
             <Text
@@ -77,7 +77,7 @@ export default function Settings() {
         </View>
       </View>
     </SafeAreaView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -101,4 +101,4 @@ const styles = StyleSheet.create({
     elevation: 3,
     backgroundColor: "#f8f9fa",
   },
-})
+});
