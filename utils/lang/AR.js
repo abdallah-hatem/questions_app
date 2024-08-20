@@ -1,7 +1,7 @@
 // Arabic Language
 export default {
-  shuffle: "ترتيب",
+  shuffle: "اللي بعده",
   home: "الرئيسية",
   settings: "الاعدادات",
   language: "اللغة",
-}
+};
