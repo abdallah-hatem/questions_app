@@ -13,6 +13,12 @@
     "production": {}
   },
   "submit": {
-    "production": {}
+    "production": {
+      "ios": {
+        "appleId": "abdallahhatem36@gmail.com",
+        "ascAppId": "6618529678",
+        "appleTeamId": "CN24UJRFFJ"
+      }
+    }
   }
 }
