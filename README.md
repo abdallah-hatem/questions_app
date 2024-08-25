@@ -58,3 +58,7 @@ eas submit -p ios
 ## build for ios
 
 eas build --platform ios
+
+
+## latest android build 
+https://expo.dev/artifacts/eas/gFpXZA8nD3gRHzMHp5UvMu.aab
