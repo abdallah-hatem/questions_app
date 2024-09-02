@@ -15,7 +15,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.game10.questions",
-      "buildNumber": "3",
+      "buildNumber": "5",
       "infoPlist": {
         "ExpoLocalization_supportsRTL": true
       }
@@ -25,7 +25,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "versionCode": "3",
+      "versionCode": "4",
       "package": "com.omar_mohsen.questionapp"
     },
     "web": {

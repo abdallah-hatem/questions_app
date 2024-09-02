@@ -12,9 +12,12 @@ import {
 import { StatusBar } from "expo-status-bar"
 import { GET_RANDOM_QUESTION } from "@/api/events"
 import { useSelector } from "react-redux"
-import { RootState } from "@/store"
+import { dispatch, RootState } from "@/store"
 import { useTranslation } from "react-i18next"
 import { Colors } from "@/constants/Colors"
+import useFetch from "@/hooks/useFetch"
+import { setNetworkError } from "@/store/general.store"
+import useModal from "@/hooks/useModal"
 
 type Category = {
   categoryNameEn: string
@@ -33,8 +36,8 @@ interface Question {
 }
 
 const QuestionCard: React.FC<Question> = ({
-  questionTextEn,
-  questionText,
+  questionTextEn = "Loading...",
+  questionText = "تحميل...",
   category,
 }) => {
   const { lang } = useSelector((state: RootState) => state.lang)
@@ -55,7 +58,9 @@ const QuestionCard: React.FC<Question> = ({
       >
         <View style={styles.catTextCont}>
           <Text style={styles.catText}>
-            {lang === "en" ? categoryNameEn : categoryName}
+            {lang === "en"
+              ? categoryNameEn ?? "Loading..."
+              : categoryName ?? "تحميل..."}
           </Text>
         </View>
 
@@ -68,24 +73,18 @@ const QuestionCard: React.FC<Question> = ({
 }
 
 const HomeScreen: React.FC = () => {
-  const [cardData, setCardData] = useState<Question>()
-  const [loading, setLoading] = useState<boolean>(false)
   const { t, i18n } = useTranslation()
 
-  console.log(cardData)
+  const {
+    data: cardData,
+    refetch,
+    loading,
+    error,
+  } = useFetch<Question>({
+    GET: GET_RANDOM_QUESTION,
+  })
 
-  console.log(i18n.language, "i18n.language")
-
-  const getData = () => {
-    setLoading(true)
-    GET_RANDOM_QUESTION()
-      .then((data: any) => setCardData(data))
-      .finally(() => setLoading(false))
-  }
-
-  useEffect(() => {
-    getData()
-  }, [])
+  const { renderModal } = useModal({ networkError: error, onRefresh: refetch })
 
   return (
     <SafeAreaView
@@ -106,7 +105,7 @@ const HomeScreen: React.FC = () => {
         }}
       />
 
-      <TouchableOpacity onPress={getData} style={styles.suffleBtn}>
+      <TouchableOpacity onPress={refetch} style={styles.suffleBtn}>
         {!loading ? (
           <Text style={styles.suffleBtnText}>{t("shuffle")}</Text>
         ) : (
@@ -122,6 +121,8 @@ const HomeScreen: React.FC = () => {
           </>
         )}
       </TouchableOpacity>
+
+      {renderModal()}
     </SafeAreaView>
   )
 }
