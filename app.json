@@ -2,7 +2,7 @@
   "expo": {
     "name": "Question?",
     "slug": "question-app",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -25,7 +25,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "versionCode": "4",
+      "versionCode": "5",
       "package": "com.omar_mohsen.questionapp"
     },
     "web": {
