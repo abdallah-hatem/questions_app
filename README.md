@@ -51,13 +51,14 @@ Join our community of developers creating universal apps.
 
 
 
+## build for ios
+
+eas build --platform ios
+
 ## push to app store
 
 eas submit -p ios
 
-## build for ios
-
-eas build --platform ios
 
 
 ## latest android build 
